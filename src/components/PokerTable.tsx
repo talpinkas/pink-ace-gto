@@ -1,24 +1,25 @@
 'use client';
 
-import { AllPosition, Card } from '@/lib/types';
+import { Card } from '@/lib/types';
 import PlayingCard from './PlayingCard';
 
 interface PokerTableProps {
-  activePosition?: AllPosition;
+  activePosition?: string;
   heroCards?: Card[];
   communityCards?: Card[];
   compact?: boolean;
 }
 
-const SEAT_POSITIONS: { pos: AllPosition; label: string; x: number; y: number }[] = [
-  { pos: 'UTG', label: 'UTG', x: 15, y: 75 },
-  { pos: 'MP', label: 'MP', x: 10, y: 40 },
-  { pos: 'LJ', label: 'LJ', x: 22, y: 10 },
-  { pos: 'HJ', label: 'HJ', x: 50, y: 2 },
-  { pos: 'CO', label: 'CO', x: 78, y: 10 },
-  { pos: 'BU', label: 'BU', x: 90, y: 40 },
-  { pos: 'SB', label: 'SB', x: 85, y: 75 },
-  { pos: 'BB', label: 'BB', x: 50, y: 85 },
+const SEAT_POSITIONS: { pos: string; aliases: string[]; label: string; x: number; y: number }[] = [
+  { pos: 'UTG', aliases: ['UTG'], label: 'UTG', x: 12, y: 72 },
+  { pos: 'UTG+1', aliases: ['UTG+1', 'MP'], label: 'UTG+1', x: 8, y: 45 },
+  { pos: 'UTG+2', aliases: ['UTG+2'], label: 'UTG+2', x: 15, y: 18 },
+  { pos: 'LJ', aliases: ['LJ'], label: 'LJ', x: 35, y: 5 },
+  { pos: 'HJ', aliases: ['HJ'], label: 'HJ', x: 57, y: 5 },
+  { pos: 'CO', aliases: ['CO'], label: 'CO', x: 78, y: 18 },
+  { pos: 'BU', aliases: ['BU', 'BTN'], label: 'BTN', x: 90, y: 45 },
+  { pos: 'SB', aliases: ['SB'], label: 'SB', x: 82, y: 72 },
+  { pos: 'BB', aliases: ['BB'], label: 'BB', x: 50, y: 88 },
 ];
 
 export default function PokerTable({
@@ -27,7 +28,7 @@ export default function PokerTable({
   communityCards,
   compact = false,
 }: PokerTableProps) {
-  const tableHeight = compact ? 'h-48 sm:h-56' : 'h-56 sm:h-72';
+  const tableHeight = compact ? 'h-52 sm:h-64' : 'h-56 sm:h-72';
 
   return (
     <div className={`relative w-full max-w-lg mx-auto ${tableHeight}`}>
@@ -44,8 +45,8 @@ export default function PokerTable({
       </div>
 
       {/* Seats */}
-      {SEAT_POSITIONS.map(({ pos, label, x, y }) => {
-        const isActive = activePosition === pos;
+      {SEAT_POSITIONS.map(({ pos, aliases, label, x, y }) => {
+        const isActive = activePosition ? aliases.includes(activePosition) || pos === activePosition : false;
         const isBB = pos === 'BB';
 
         return (
@@ -59,7 +60,7 @@ export default function PokerTable({
             }}
           >
             <div
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${
+              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all duration-300 ${
                 isActive
                   ? 'bg-pink-500 text-white seat-active'
                   : isBB

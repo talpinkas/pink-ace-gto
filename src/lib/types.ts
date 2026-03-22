@@ -1,7 +1,7 @@
-export type Position = 'UTG' | 'MP' | 'LJ' | 'HJ' | 'CO' | 'BU' | 'SB';
-export type AllPosition = Position | 'BB';
+export type JamPosition = 'UTG' | 'MP' | 'LJ' | 'HJ' | 'CO' | 'BU' | 'SB';
+export type RfiPosition = 'UTG' | 'UTG+1' | 'UTG+2' | 'LJ' | 'HJ' | 'CO' | 'BTN' | 'SB';
+export type AllPosition = RfiPosition | JamPosition | 'BB';
 
-export type RfiDepth = '15BB' | '20BB' | '25BB' | '30BB' | '40BB' | '50BB';
 export type JamDepth = '6BB' | '9BB' | '12BB' | '15BB';
 
 export type Suit = '♠' | '♥' | '♦' | '♣';
@@ -35,12 +35,19 @@ export interface Tip {
   icon: string;
 }
 
+export interface SbDetail {
+  raise_value: string[];
+  raise_bluff: string[];
+  limp: string[];
+}
+
 export interface PinkAceData {
-  rfi: Record<RfiDepth, Record<Position, string[]>>;
-  openJam: Record<JamDepth, Record<Position, string[]>>;
+  rfi: Record<RfiPosition, string[]>;
+  sbDetail: SbDetail;
+  openJam: Record<JamDepth, Record<JamPosition, string[]>>;
   postflopScenarios: PostflopScenario[];
-  positions: Position[];
-  rfiDepths: RfiDepth[];
+  rfiPositions: RfiPosition[];
+  positions: JamPosition[];
   jamDepths: JamDepth[];
   raiseSizing: RaiseSizingEntry[];
   tips: Tip[];
