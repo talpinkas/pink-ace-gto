@@ -13,7 +13,7 @@ export default function RangeGrid({ range, highlightHand, compact = false }: Ran
   const rangeSet = new Set(range);
 
   return (
-    <div className={`grid grid-cols-13 ${compact ? 'gap-0' : 'gap-px'} w-full max-w-[420px] mx-auto`}>
+    <div className={`grid ${compact ? 'gap-0' : 'gap-px'} w-full max-w-[420px] mx-auto`} style={{ gridTemplateColumns: 'repeat(13, minmax(0, 1fr))' }}>
       {grid.map((row, i) =>
         row.map((hand, j) => {
           const inRange = rangeSet.has(hand);
